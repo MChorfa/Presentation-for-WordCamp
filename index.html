@@ -33,10 +33,6 @@
 
     #slides {
        width: 999999px; 
-       overflow: hidden;
-
-
-       
     }
 
 
@@ -58,7 +54,25 @@
   box-orient: horizontal;
   box-pack: center;
   box-align: center;
-   }
+  }
+
+  .opacAnimation {
+  opacity: 0;
+  -webkit-animation-name: opac;
+  -webkit-animation-duration: 3s;
+  -webkit-animation-fill-mode: forwards;
+  }
+
+@-webkit-keyframes opac {
+ 0% {
+   opacity: 0;
+ }
+ 100% {
+   opacity: 1;
+ }
+
+}
+  
 
 
    /* Slide Styling */
@@ -72,42 +86,123 @@
 
    #slides h1,
    #slides h2,
-   #slides h3 {
+   #slides h3,
+   #slides h4{
       color: #292929;
-      font-family: 'League Gothic', Arial, Helvetica, sans-serif;
+      font-family: 'League Gothic', Arial, Helvetica;
       text-shadow: 5px 3px 0 white;
-      letter-spacing: -8px;
+      letter-spacing: -5px;
+      margin-top: 0;
    }
 
    #slides > div h2 {
       margin: 0;
-      font-size: 130px;
+      font-size: 180px;
       line-height: 1em;
       
    }
 
    h2 span {
-      font-size: .45em;
+      font-size: .3em;
       display: block;
-      margin-bottom: -50px;
+      margin-bottom: 10px;
       letter-spacing: -2px;
       color: blue;
+      line-height: 1em;
       font-style: italic;
       font-family: 'Crimson Text';
       text-shadow: 0 1px 0 white;
    }
 
    #slides h3 {
-      font-size: 85px;
+      font-size: 125px;
       padding-right: 50px;
+      padding-bottom: 20px;
+      margin-bottom: .4em;
+      border-bottom: 1px solid #666;
 
-   }
+      }
+
+      #slides div div {
+         text-align: center;
+      }
 
    #slides ul {
       font-size: 2em;
       line-height: 1.5em;
       text-align: left;
+      margin-top: 0;
+      padding-left: 0;
+      }
+
+      li em {
+         font-size: .9em;
+         color: #666;
+      }
+      
+   .full-page-img {
+      -webkit-transform: rotateZ(-5deg);
+      -webkit-box-shadow: 0 2px 5px #292929;
    }
+
+   .full-page-img img {
+      max-width: 400px;
+   }
+
+
+   /* GRID */
+   .grid {
+      
+      background: rgba(0,0,0,.2);
+      border: 1px solid white;
+      outline: 1px solid #666;
+      font-size: 13px;
+      -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.4);
+  /* flexbox setup */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+      
+   }
+
+   .grid > div {
+       -webkit-box-flex: 1;
+      padding: .4em 2em;
+   }
+
+   #slides .grid h4 {
+      font-size: 50px;
+      text-shadow: none;
+      margin-top: .5em;
+      padding-bottom: .2em;
+      margin-bottom: .5em;
+      letter-spacing: -1px;
+      border-bottom: 1px solid black;
+   }
+
+   .grid > div:nth-child(even) {
+   background: rgba(255,255,255,.5);
+   border-left: 1px solid white;
+   border-right: 1px solid #444;
+   }
+
+   .grid > div:nth-child(odd) {
+   border-left: 1px solid #e3e3e3;
+      border-right: 1px solid #666;
+      }
+
+      .grid > div:nth-child(1) {
+         border-left: none;
+         }
+
+      .grid > div:last-child {
+         border-right: none;
+      }
+
+   .grid li {
+      list-style: none;
+      line-height: 1.8em;
+   }
+
    </style>
    
 </head>
@@ -123,7 +218,7 @@
 var Slides = {
    container : $('#slides'),
 
-   slideNum : 6,
+   totalSlides : 6,
 
    translateAmount : 0,
 
@@ -133,53 +228,57 @@ var Slides = {
       Slides.loadContent();
       Slides.keyPress();
 
-      if ( location.hash ) {
+      if ( /#slide-\d{1,3}/i.test( location.hash ) ) {
          Slides.currentSlide = location.hash.split('-')[1];
          Slides.goto( Slides.currentSlide );
       }
    },
 
    loadContent : function() {
-      for ( var i = 0; i < Slides.slideNum; i++ ) {
-         $('<div id="#slide-' + i + '"></div>').load('slides/' + i + '.html').appendTo(Slides.container);
+      for ( var i = 0; i < Slides.totalSlides; i++ ) {
+         $('<div id="#slide-' + i + '"></div>')
+            .load('slides/' + i + '.html')
+            .appendTo(Slides.container);
       }
    },
 
    keyPress : function() {
-      $('body').keydown(function(evt) {
-         // next (right)
-         if ( evt.keyCode === 39 || evt.keyCode === 37 ) {
-            evt.preventDefault();
-            if ( evt.keyCode === 39 ) {
-               Slides.next(); 
-               return;
-            }
-            Slides.prev();
+      $('body').keydown(function(e) {
+         if ( e.keyCode === 39 || e.keyCode === 37 ) {
+            e.preventDefault();
+            ( e.keyCode === 39 ) ? Slides.next() : Slides.prev();
          }
       });
    },
 
    next : function( ) {
       Slides.translateAmount -= 1380;
-      Slides.animate();
       Slides.updateHash( ++Slides.currentSlide );
+      Slides.animate();
    },
 
    goto : function(slide) {
       Slides.translateAmount = -1380 * slide; 
+     Slides.container.animate({
+        left : Slides.translateAmount + 'px'
+     }, 1000);
       Slides.animate();
   },
 
   animate : function() {
-      Slides.container.children().css('-webkit-transform', 'translateX(' + Slides.translateAmount + 'px)');
+     Slides
+      .container
+      .children()
+         .css( '-webkit-transform', 'translateX(' + Slides.translateAmount + 'px)');
   },
 
-   prev : function() {
+  prev : function() {
+     // No more left to go back.
       if ( Slides.translateAmount === 0 ) return;
 
       Slides.translateAmount += 1380;
-      Slides.animate();
       Slides.updateHash( --Slides.currentSlide );
+      Slides.animate();
    },
 
    updateHash : function( direction ) {
@@ -188,12 +287,13 @@ var Slides = {
    }
 };
 
-
+// All right; let's do this. Leeeeerrroy Jenkins. 
 Slides.init();
 
 </script>
 </body>
 </html>
+
 
 
 
