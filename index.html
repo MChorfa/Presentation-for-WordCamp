@@ -127,15 +127,16 @@ var Slides = {
 
    translateAmount : 0,
 
+   currentSlide : 0,
+
    init : function() {
       Slides.loadContent();
       Slides.keyPress();
 
       if ( location.hash ) {
-         var requestedSlide = location.hash.split('-')[1];
-         Slides.next(requestedSlide);
+         Slides.currentSlide = location.hash.split('-')[1];
+         Slides.goto( Slides.currentSlide );
       }
-      
    },
 
    loadContent : function() {
@@ -158,17 +159,32 @@ var Slides = {
       });
    },
 
-   next : function(amount) {
-      if ( amount ) Slides.translateAmount = -1380 * amount;
-      else Slides.translateAmount -= 1380;
-      Slides.container.children().css('-webkit-transform', 'translateX(' + Slides.translateAmount + 'px)');
+   next : function( ) {
+      Slides.translateAmount -= 1380;
+      Slides.animate();
+      Slides.updateHash( ++Slides.currentSlide );
    },
+
+   goto : function(slide) {
+      Slides.translateAmount = -1380 * slide; 
+      Slides.animate();
+  },
+
+  animate : function() {
+      Slides.container.children().css('-webkit-transform', 'translateX(' + Slides.translateAmount + 'px)');
+  },
 
    prev : function() {
       if ( Slides.translateAmount === 0 ) return;
 
       Slides.translateAmount += 1380;
-      Slides.container.children().css('-webkit-transform', 'translateX(' + Slides.translateAmount + 'px)');
+      Slides.animate();
+      Slides.updateHash( --Slides.currentSlide );
+   },
+
+   updateHash : function( direction ) {
+      // Update current Slides and hash.
+      location.hash = '#slide-' + Slides.currentSlide;
    }
 };
 
