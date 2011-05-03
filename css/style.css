@@ -11,32 +11,36 @@ body {
 		from(rgba(245,245,245,1.0)), 
 		to(rgba(100,100,100,1.0))
 	);
-	font-family: 'Crimson Text';
 	margin: 0;
 	padding: 2.5em 0;
 }
+
 .wrap {
 	margin: auto;
 	width: 1180px;
 }
+
 #slides {
 	width: 999999px;
 }
+
 #slides > div {
+	float: left;
+	height: 600px;
+	width: 1180px;
+	margin-right: 200px;
+	text-align: center;
+
 	box-align: center;
 	box-orient: horizontal;
 	box-pack: center;
 	display: box;
 	display: -webkit-box;
-	float: left;
-	height: 600px;
-	width: 1180px;
-	margin-right: 200px;
 	-webkit-box-align: center;
 	-webkit-box-orient: horizontal;
 	-webkit-box-pack: center;
+
 	-webkit-transition: all 1s linear;
-	text-align: center;
 }
 
 #slides {
@@ -44,21 +48,23 @@ body {
 }
 
 #slides h1,
- #slides h2,
- #slides h3,
- #slides h4,
- #slides h5 {
+#slides h2,
+#slides h3,
+#slides h4,
+#slides h5 {
 	color: #292929;
 	font-family: 'League Gothic', Arial, Helvetica;
 	letter-spacing: -5px;
 	margin-top: 0;
 	text-shadow: 5px 3px 0 white;
 }
+
 #slides > div h2 {
 	font-size: 180px;
 	line-height: 1em;
 	margin: 0;
 }
+
 h2 span {
 	color: blue;
 	display: block;
@@ -70,6 +76,7 @@ h2 span {
 	margin-bottom: 10px;
 	text-shadow: 0 1px 0 white;
 }
+
 #slides h3 {
 	border-bottom: 1px solid #666;
 	font-size: 125px;
@@ -77,9 +84,11 @@ h2 span {
 	padding-bottom: 20px;
 	padding-right: 50px;
 }
+
 #slides div div {
 	text-align: center;
 }
+
 #slides ul {
 	font-size: 2em;
 	line-height: 1.5em;
