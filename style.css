@@ -30,37 +30,24 @@ body {
 	display: -webkit-box;
 	float: left;
 	height: 600px;
+	width: 1180px;
 	margin-right: 200px;
 	-webkit-box-align: center;
 	-webkit-box-orient: horizontal;
 	-webkit-box-pack: center;
 	-webkit-transition: all 1s linear;
-	width: 1180px;
+	text-align: center;
 }
-.opacAnimation {
-	opacity: 0;
-	-webkit-animation-duration: 3s;
-	-webkit-animation-fill-mode: forwards;
-	-webkit-animation-name: opac;
-}
-@-webkit-keyframes opac {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
+
 #slides {
 	font-family: arial;
 }
-#slides > div {
-	text-align: center;
-}
+
 #slides h1,
  #slides h2,
  #slides h3,
- #slides h4 {
+ #slides h4,
+ #slides h5 {
 	color: #292929;
 	font-family: 'League Gothic', Arial, Helvetica;
 	letter-spacing: -5px;

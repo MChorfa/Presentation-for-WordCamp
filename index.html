@@ -25,11 +25,21 @@ var Slides = {
 
    currentSlide : 0,
 
+   slideWidth : '',
+
    init : function(totalSlides) {
-      if ( !totalSlides ) return false;
+      var each;
+
+      if ( !totalSlides ) throw new Error('Please pass the total number of slides.');
       Slides.totalSlides = totalSlides;
 
       Slides.loadContent();
+
+      each = Slides.container.children('div');
+      
+      // Determine the width of our canvas
+      Slides.slideWidth = each.width() + ~~( each.css('margin-right').split('px')[0] );
+
       Slides.keyPress();
 
       // If the page loads, and a slide is specified in the hash,
@@ -59,11 +69,6 @@ var Slides = {
             .appendTo(Slides.container);
          }
       Slides.container.show();
-
-
-
-
-
    },
 
    keyPress : function() {
@@ -77,17 +82,17 @@ var Slides = {
    },
 
    next : function( ) {
-      Slides.translateAmount -= 1380;
+      Slides.translateAmount -= Slides.slideWidth;
       Slides.updateHash( ++Slides.currentSlide );
       Slides.animate();
    },
 
    goto : function(slide) {
-      Slides.translateAmount = -1380 * slide; 
-     Slides.container.animate({
-        left : Slides.translateAmount
-     }, 1000);
-     Slides.animate();
+      Slides.translateAmount = -Slides.slideWidth * slide; 
+      Slides.container.animate({
+         left : Slides.translateAmount
+      }, 1000);
+      Slides.animate();
   },
 
   animate : function() {
@@ -101,7 +106,7 @@ var Slides = {
      // No more left to go back.
       if ( Slides.translateAmount === 0 ) return;
 
-      Slides.translateAmount += 1380;
+      Slides.translateAmount += Slides.slideWidth;
       Slides.updateHash( --Slides.currentSlide );
       Slides.animate();
    },
