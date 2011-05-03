@@ -19,16 +19,21 @@
 var Slides = {
    container : $('#slides'),
 
-   totalSlides : 6,
+   totalSlides : '',
 
    translateAmount : 0,
 
    currentSlide : 0,
 
-   init : function() {
+   init : function(totalSlides) {
+      if ( !totalSlides ) return false;
+      Slides.totalSlides = totalSlides;
+
       Slides.loadContent();
       Slides.keyPress();
 
+      // If the page loads, and a slide is specified in the hash,
+      // go directly to that hash.
       if ( /#slide-\d{1,3}/i.test( location.hash ) ) {
          Slides.currentSlide = location.hash.split('-')[1];
          Slides.goto( Slides.currentSlide );
@@ -36,15 +41,34 @@ var Slides = {
    },
 
    loadContent : function() {
+      // Another method is to hide the container
+      // var frag = document.createDocumentFragment(),
+      //    bit;
+      // for ( var i = 0; i < Slides.totalSlides; i++ ) {
+      //    bit = $('<div id="#slide-' + i + '"></div>').load('slides/' + i + '.html')[0];
+      //    frag.appendChild(bit);
+      //    }
+      // Slides.container.append(frag);
+
+
+      // OR
+      Slides.container.hide();
       for ( var i = 0; i < Slides.totalSlides; i++ ) {
          $('<div id="#slide-' + i + '"></div>')
             .load('slides/' + i + '.html')
             .appendTo(Slides.container);
-      }
+         }
+      Slides.container.show();
+
+
+
+
+
    },
 
    keyPress : function() {
-      $('body').keydown(function(e) {
+      $(document.body).keydown(function(e) {
+         // if left or right arrow key is pressed
          if ( e.keyCode === 39 || e.keyCode === 37 ) {
             e.preventDefault();
             ( e.keyCode === 39 ) ? Slides.next() : Slides.prev();
@@ -61,9 +85,9 @@ var Slides = {
    goto : function(slide) {
       Slides.translateAmount = -1380 * slide; 
      Slides.container.animate({
-        left : Slides.translateAmount + 'px'
+        left : Slides.translateAmount
      }, 1000);
-      Slides.animate();
+     Slides.animate();
   },
 
   animate : function() {
@@ -89,7 +113,7 @@ var Slides = {
 };
 
 // All right; let's do this. Leeeeerrroy Jenkins. 
-Slides.init();
+Slides.init(6);
 
 </script>
 </body>
